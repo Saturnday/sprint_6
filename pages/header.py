@@ -1,6 +1,7 @@
 import allure
 from pages.base_page import BasePage
 from locators.header_locators import HeaderLocators
+from data.data import TestData
 
 class Header(BasePage):
     @allure.step('Клик на Скутер')
@@ -15,3 +16,12 @@ class Header(BasePage):
     def get_yandex_iframe_label(self):
         iframe = self.wait_for_element(HeaderLocators.YANDEX_IFRAME)
         return iframe.get_attribute("aria-label")
+    
+    @allure.step('Проверяем открыта ли главная страница Самоката')
+    def is_home_page_opened(self):
+        return TestData.SCOOTER_HOME_TEXT in self.driver.page_source
+
+    @allure.step('Проверяем открылся ли Дзен')
+    def is_dzen_page_opened(self):
+        iframe = self.find_element_with_wait(HeaderLocators.YANDEX_IFRAME)
+        return "Поиск Яндекса" in iframe.get_attribute("aria-label")

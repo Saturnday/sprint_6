@@ -2,7 +2,6 @@ import pytest
 from pages.main_page import MainPage
 from pages.header import Header
 from data.data import TestData
-from selenium.webdriver.support.ui import WebDriverWait
 
 class TestHeaderLinks:
 
@@ -13,7 +12,7 @@ class TestHeaderLinks:
         header = Header(driver)
         header.click_scooter_logo()
 
-        assert TestData.SCOOTER_HOME_TEXT in driver.page_source
+        assert header.is_home_page_opened()
 
     def test_yandex_logo_opens_dzen(self, driver):
         page = MainPage(driver)
@@ -22,9 +21,8 @@ class TestHeaderLinks:
         header = Header(driver)
         header.click_yandex_logo()
 
-        # Переключаемся на новую вкладку
-        WebDriverWait(driver, 10).until(lambda d: len(d.window_handles) > 1)
-        driver.switch_to.window(driver.window_handles[-1])
+        # Всё перенесено в BasePage
+        header.switch_to_new_tab()
 
-        label = header.get_yandex_iframe_label()
-        assert "Поиск Яндекса" in label
+        assert header.is_dzen_page_opened()
+

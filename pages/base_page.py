@@ -46,4 +46,16 @@ class BasePage:
         
         self.driver.drag_and_drop(elem_from, elem_to).perform()
     
+    def switch_to_new_tab(self):
+        # Ждём появления новой вкладки
+        self.wait.until(lambda d: len(d.window_handles) > 1)
+        self.driver.switch_to.window(self.driver.window_handles[-1])
+        
+        # Ждём, пока страница в новой вкладке полностью загрузится (DOM готов)
+        WebDriverWait(self.driver, 20).until(
+            lambda d: d.execute_script("return document.readyState") == "complete"
+        )
+
+
+    
     
